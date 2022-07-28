@@ -1,0 +1,9 @@
+.error {
+  border: 2px solid red ;
+}
+table {
+  margin-top: 20px;
+}
+.delete {
+  cursor: pointer;
+}
