@@ -12,6 +12,9 @@ let addWordToTable = index => {
     table.innerHTML += `
         <tr>
             <td>
+            ${index + 1}
+            </td>
+            <td>
             ${words[index].englishWord}
             </td>
             <td>
@@ -63,11 +66,13 @@ const enterButton = () => {
 
 saveButton.addEventListener('click', () => {
     enterButton();
+    deleteWord();
 });
 
 document.addEventListener('keydown', event => {
     if(event.keyCode === 13){
         enterButton();
+        deleteWord();
     }
 });
 

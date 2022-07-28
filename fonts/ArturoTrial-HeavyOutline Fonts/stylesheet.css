@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Arturo Trial';
+    src: url('ArturoTrial-HeavyOutline.eot');
+    src: url('ArturoTrial-HeavyOutline.eot?#iefix') format('embedded-opentype'),
+        url('ArturoTrial-HeavyOutline.woff2') format('woff2'),
+        url('ArturoTrial-HeavyOutline.woff') format('woff'),
+        url('ArturoTrial-HeavyOutline.ttf') format('truetype'),
+        url('ArturoTrial-HeavyOutline.svg#ArturoTrial-HeavyOutline') format('svg');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
