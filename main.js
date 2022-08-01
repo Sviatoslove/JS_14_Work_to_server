@@ -1,96 +1,180 @@
-const engInput = document.querySelector('.input-eng');
-const rusInput = document.querySelector('.input-rus');
-const inputs = document.querySelectorAll('.inputs');
-const saveButton = document.querySelector('.btn');
-const table = document.querySelector('.table');
+/* 
+    TASK 1
 
-let words;
+    Дан код:
 
-localStorage.length < 1 ? words = [] : words = JSON.parse(localStorage.getItem('words'));
+    console.log('1');
+    setTimeout(function() {
+    console.log('2')
+    }, 0);
+    Promise.resolve().then( () => console.log('3') );
+    console.log('4');
 
-let addWordToTable = index => {
-    table.innerHTML += `
-        <tr>
-            <td>
-            ${index + 1}
-            </td>
-            <td>
-            ${words[index].englishWord}
-            </td>
-            <td>
-            ${words[index].russianWord}
-            </td>
-            <td class="delete">
-            ❌
-            </td>
-        </tr>
-    `
-};
+    Два вопроса:
+    1. В каком порядке выведутся цифры ?
+    2. Почему они выведутся именно так
 
-const getWordsLength = () => {
-    words.forEach((item, idx) => {
-        addWordToTable(idx);
-    })
-}
+    ps: Дать на второй вопрос развернутый ответ с комментарием для каждой операции.
 
-getWordsLength();
 
-class CreateWord {
-    constructor(englishWord, russianWord) {
-        this.englishWord = englishWord;
-        this.russianWord = russianWord;
-    };
-};
+*/
 
-const enterButton = () => {
-    if(
-        rusInput.value.length < 1 ||
-        engInput.value.length < 1 ||
-        !isNaN(rusInput.value)    ||
-        !isNaN(engInput.value)
-    ) {
-        for(let key of inputs) {
-            key.classList.add('error');
-        }
-    } else {
-        for(let key of inputs) {
-            key.classList.remove('error');
-        };
-        words.push(new CreateWord(engInput.value, rusInput.value));
-        localStorage.setItem('words', JSON.stringify(words));
-        addWordToTable(words.length - 1);
-        rusInput.value = '';
-        engInput.value = '';
-    };
-};
+/*
+    1
+    4
+    3
+    2
 
-saveButton.addEventListener('click', () => {
-    enterButton();
-    deleteWord();
-});
+    console.log('1');// выведется сразу, т.к. стоит первой и нет отсрочек, попадает в callstack, выводится и выбрасывается из callstack;
+    setTimeout(function() {
+    console.log('2')
+    }, 0);// попадает в callstack и сразу из callstack в webApis там обрабатывается после отправляется в callback и в итоге выведется самая последняя;
+    Promise.resolve().then(() => console.log('3'));// выведется третьим, т.к. тоже попадает в webApis и требует больше времени на обработку, чем следующая строка, но меньше , чем предыдущая, т.к. она отложенная и выполнится после всего кода.
+    console.log('4');//выведется вторым, т.к.  нет отсрочек и самая простая опреация, попадает в callstack, выводится и выбрасывается из callstack;
 
-document.addEventListener('keydown', event => {
-    if(event.keyCode === 13){
-        enterButton();
-        deleteWord();
+*/
+
+/*
+    TASK 2
+
+    Функция из браузерного API, setTimeout работает с помощью callback functions.
+    Необходимо переписать ее, используя promises.
+    
+    function delay(ms) {
+        (код, который написан вами)
     }
-});
 
-const deleteWord = () => {
-    let deleteButtons = document.querySelectorAll('.delete');
-    for(let i = 0; i < deleteButtons.length; i++){
-        deleteButtons[i].addEventListener('click', () => {
-            words.forEach((item, idx) => {
-                if(idx === i) {
-                    words.splice(idx, 1);
-                    localStorage.setItem('words', JSON.stringify(words));
-                    table.innerHTML = ``;
-                    getWordsLength();
-                };
-            });
-            deleteWord();
-        });
-    };
+    function delay() должна возвращать promise,
+    который перейдёт в состояние «выполнен» через ms миллисекунд.
+
+    Example:
+
+    delay(2000).then(() => console.log('выполнилось через 2 секунды'));
+
+*/
+
+const delay = ms => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            console.log('Вы не ждали? А я здесь)))');
+            setTimeout(() => {
+                resolve();
+            },ms/2)
+        }, ms);
+    });
 };
+    
+// delay(3000).then(() => console.log('выполнилось через 3 секунды'));
 
-deleteWord();
+/* 
+    TASK 3
+
+    Дан код: 
+
+    Promise
+    .resolve()
+    .then(() => console.log(1))
+    .then(() => {
+        setTimeout(() => {
+            console.log(2)
+        }, 0)
+    })
+    .then(() => console.log(3));
+
+    Что выведет консоль ?
+
+    ps: Мы прекрасно понимаем что подобную задачу можно просто прогнать через код,
+    и узнать результат, но не обманывайте сами себя. 
+    Представьте что вы на собеседовании и вам дали такую задачу,
+    и под рукой нет компьютера. Просто проанализируйте код и напишите вариант ответа
+*/
+
+1
+2
+3
+
+/* 
+
+    TASK 4
+    
+    Дан код:
+
+
+    console.log(1);
+
+    setTimeout(() => {
+        console.log(2);
+    }, 0);
+
+    console.log(3);
+
+    Promise.resolve().then(() => {
+        console.log(4);
+    })
+
+    console.log(5);
+
+    while('') {
+        console.log(6);
+    }
+
+    console.log(7);
+
+    Что выведет консоль ? 
+
+    ps: Мы прекрасно понимаем что подобную задачу можно просто прогнать через код,
+    и узнать результат, но не обманывайте сами себя. 
+    Представьте что вы на собеседовании и вам дали такую задачу,
+    и под рукой нет компьютера. Просто проанализируйте код и напишите вариант ответа
+*/
+
+1
+3
+5
+7
+4
+6
+2
+
+/* 
+    TASK 5
+    
+    Дан код:
+
+    Promise
+    .resolve()
+    .then(() => console.log(1))
+    .then(() => console.log(2))
+    .then(() => console.log(3));
+
+    Promise
+    .resolve()
+    .then(() => console.log(4))
+    .then(() => console.log(5))
+    .then(() => console.log(6));
+
+    Что выведет консоль ? 
+
+    ps: Мы прекрасно понимаем что подобную задачу можно просто прогнать через код,
+    и узнать результат, но не обманывайте сами себя. 
+    Представьте что вы на собеседовании и вам дали такую задачу,
+    и под рукой нет компьютера. Просто проанализируйте код и напишите вариант ответа
+*/
+
+1
+2
+3
+4
+5
+6
+    Promise
+    .resolve()
+    .then(() => console.log(1))
+    .then(() => console.log(2))
+    .then(() => console.log(3));
+
+    Promise
+    .resolve()
+    .then(() => console.log(4))
+    .then(() => console.log(5))
+    .then(() => console.log(6));
