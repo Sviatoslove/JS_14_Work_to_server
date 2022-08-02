@@ -1,180 +1,132 @@
 /* 
     TASK 1
 
-    Дан код:
+    Дан объект : 
 
-    console.log('1');
-    setTimeout(function() {
-    console.log('2')
-    }, 0);
-    Promise.resolve().then( () => console.log('3') );
-    console.log('4');
+    const car = {
+        company : 'Toyota',
+        model : 'Land Cruser',
+        doors : 5,
+        color : 'white'
+    }
 
-    Два вопроса:
-    1. В каком порядке выведутся цифры ?
-    2. Почему они выведутся именно так
-
-    ps: Дать на второй вопрос развернутый ответ с комментарием для каждой операции.
-
+    Необходимо преобразовать данный объект в формат JSON , и потом обратно.
+    Запишите оба результата в переменную и выведите их значения в консоль.
 
 */
 
-/*
-    1
-    4
-    3
-    2
+const car = {
+    company : 'Toyota',
+    model : 'Land Cruser',
+    doors : 5,
+    color : 'white'
+}
 
-    console.log('1');// выведется сразу, т.к. стоит первой и нет отсрочек, попадает в callstack, выводится и выбрасывается из callstack;
-    setTimeout(function() {
-    console.log('2')
-    }, 0);// попадает в callstack и сразу из callstack в webApis там обрабатывается после отправляется в callback и в итоге выведется самая последняя;
-    Promise.resolve().then(() => console.log('3'));// выведется третьим, т.к. тоже попадает в webApis и требует больше времени на обработку, чем следующая строка, но меньше , чем предыдущая, т.к. она отложенная и выполнится после всего кода.
-    console.log('4');//выведется вторым, т.к.  нет отсрочек и самая простая опреация, попадает в callstack, выводится и выбрасывается из callstack;
+const carStr = JSON.stringify(car);
+// console.log(carStr);
+const result = JSON.parse(carStr);
+// console.log(result);
 
-*/
-
-/*
+/* 
     TASK 2
 
-    Функция из браузерного API, setTimeout работает с помощью callback functions.
-    Необходимо переписать ее, используя promises.
-    
-    function delay(ms) {
-        (код, который написан вами)
-    }
+    Воспользуйтесь free REST API: https://jsonplaceholder.typicode.com/ для получения 
+    100 albums. И выведите все альбомы на html страницу в виде : 
 
-    function delay() должна возвращать promise,
-    который перейдёт в состояние «выполнен» через ms миллисекунд.
+    UserId : значение userId с пришедшего вам объекта,
+    Id : значение Id с пришедшего вам объекта,
+    Title : значение title с пришедшего вам объекта
 
-    Example:
-
-    delay(2000).then(() => console.log('выполнилось через 2 секунды'));
+    В итоге на вашей странице должно распарситься 100 разных альбомов. 
 
 */
 
-const delay = ms => {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            console.log('Вы не ждали? А я здесь)))');
-            setTimeout(() => {
-                resolve();
-            },ms/2)
-        }, ms);
+const btnUser = document.querySelector('.btn__user');
+const btnId = document.querySelector('.btn__id');
+const btnTitle = document.querySelector('.btn__title');
+const albums = document.querySelector('.albums');
+const btnAlbums = document.querySelector('.btn__albums')
+
+const getAlbums = succesRequired => {
+  const xhr = new XMLHttpRequest();
+  const url = 'https://jsonplaceholder.typicode.com/albums';
+  xhr.open('GET', url);
+  xhr.addEventListener('load', () => {
+    succesRequired(JSON.parse(xhr.response));
+  });
+  xhr.addEventListener('error', () => {
+    console.log('Произошла ошибка');
+  });
+  xhr.send();
+};
+
+const domStyle = () => {
+    albums.style.display = 'flex';
+    albums.style.flexWrap = 'wrap';
+    albums.style.width = '500px';
+    albums.style.marginTop = '10px';
+}
+
+const getAlbumsUserId = response => {
+    domStyle();
+    response.forEach((item, idx) => {
+        if(idx < response.length - 1) {
+            albums.innerHTML += `
+            <div>UserId: ${item.userId},&nbsp</div>
+        `
+        }else {
+            albums.innerHTML += `
+            <div>UserId: ${item.userId}.&nbsp</div>
+        `
+        }
     });
 };
-    
-// delay(3000).then(() => console.log('выполнилось через 3 секунды'));
 
-/* 
-    TASK 3
+const getAlbumsId = response => {
+    domStyle();
+    response.forEach((item, idx) => {
+        if(idx < response.length - 1) {
+            albums.innerHTML += `
+            <div>Id: ${item.id},&nbsp</div>
+        `
+        }else {
+            albums.innerHTML += `
+            <div>Id: ${item.id}.&nbsp</div>
+        `
+        }
+    });
+};
 
-    Дан код: 
+const getAlbumsTitle = response => {
+    domStyle();
+    response.forEach(item => {
+            albums.innerHTML += `
+            <div>Title: ${item.title}.&nbsp</div>
+        `
+    });
+};
 
-    Promise
-    .resolve()
-    .then(() => console.log(1))
-    .then(() => {
-        setTimeout(() => {
-            console.log(2)
-        }, 0)
-    })
-    .then(() => console.log(3));
+const $getAlbums = response => {
+    domStyle();
+    response.forEach(item => {
+        albums.innerHTML += `
+            <div>UserId: ${item.userId}, Id: ${item.id}, Title: ${item.title}.</div>
+        `
+    });
+};
 
-    Что выведет консоль ?
+btnUser.addEventListener('click', () => {
+    getAlbums(getAlbumsUserId);
+});
 
-    ps: Мы прекрасно понимаем что подобную задачу можно просто прогнать через код,
-    и узнать результат, но не обманывайте сами себя. 
-    Представьте что вы на собеседовании и вам дали такую задачу,
-    и под рукой нет компьютера. Просто проанализируйте код и напишите вариант ответа
-*/
+btnId.addEventListener('click', () => {
+    getAlbums(getAlbumsId);
+});
 
-1
-2
-3
+btnTitle.addEventListener('click', () => {
+    getAlbums(getAlbumsTitle);
+});
 
-/* 
-
-    TASK 4
-    
-    Дан код:
-
-
-    console.log(1);
-
-    setTimeout(() => {
-        console.log(2);
-    }, 0);
-
-    console.log(3);
-
-    Promise.resolve().then(() => {
-        console.log(4);
-    })
-
-    console.log(5);
-
-    while('') {
-        console.log(6);
-    }
-
-    console.log(7);
-
-    Что выведет консоль ? 
-
-    ps: Мы прекрасно понимаем что подобную задачу можно просто прогнать через код,
-    и узнать результат, но не обманывайте сами себя. 
-    Представьте что вы на собеседовании и вам дали такую задачу,
-    и под рукой нет компьютера. Просто проанализируйте код и напишите вариант ответа
-*/
-
-1
-3
-5
-7
-4
-6
-2
-
-/* 
-    TASK 5
-    
-    Дан код:
-
-    Promise
-    .resolve()
-    .then(() => console.log(1))
-    .then(() => console.log(2))
-    .then(() => console.log(3));
-
-    Promise
-    .resolve()
-    .then(() => console.log(4))
-    .then(() => console.log(5))
-    .then(() => console.log(6));
-
-    Что выведет консоль ? 
-
-    ps: Мы прекрасно понимаем что подобную задачу можно просто прогнать через код,
-    и узнать результат, но не обманывайте сами себя. 
-    Представьте что вы на собеседовании и вам дали такую задачу,
-    и под рукой нет компьютера. Просто проанализируйте код и напишите вариант ответа
-*/
-
-1
-2
-3
-4
-5
-6
-    Promise
-    .resolve()
-    .then(() => console.log(1))
-    .then(() => console.log(2))
-    .then(() => console.log(3));
-
-    Promise
-    .resolve()
-    .then(() => console.log(4))
-    .then(() => console.log(5))
-    .then(() => console.log(6));
+btnAlbums.addEventListener('click', () => {
+    getAlbums($getAlbums);
+});
