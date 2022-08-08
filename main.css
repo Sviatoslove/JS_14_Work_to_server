@@ -1,11 +1,12 @@
 .wrapper__post {
   margin-bottom: 15px;
   text-align: center;
-  border: 2px solid black;
+  border: 3px solid #fff;
   border-radius: 10px;
   background-color: rgb(210, 182, 140);
   color: blanchedalmond;
   padding: 10px 0 ;
+  font-weight: bold;
 }
 .btn__delete {
   margin-top: 10px;
