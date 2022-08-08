@@ -5,13 +5,71 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="global.css">
   </head>
   <body>
-    <button class="btn__user">GET albums UserId</button>
-    <button class="btn__id">GET albums Id</button>
-    <button class="btn__title">GET albums Title</button>
-    <button class="btn__albums">GET albums Title</button>
-    <div class="albums"></div>
-  <script src="main.js"></script>
+    <header>
+      <div class="container">
+        <div class="inputs d-flex justify-content-around">
+          <div class="add">
+            <h2>
+              Add a new Photo
+            </h2>
+            <form action="">
+              <div class="input__wrapper">
+                <input type="text" placeholder="Album Id" class="albumIdAdd">
+              </div>
+              <div class="input__wrapper">
+                <input type="text" placeholder="Title" class="titleAdd">
+              </div>
+              <div class="input__wrapper">
+                <input type="text" placeholder="Url" class="urlAdd">
+              </div>
+              <div class="input__wrapper">
+                <input type="text" placeholder="Thumbnail url" class="thumbnailUrlAdd">
+              </div>
+            </form>
+          </div>
+          <div class="update">
+            <h2>Update Photo</h2>
+          <form action="">
+            <div class="input__wrapper">
+              <input type="text" placeholder="Album Id" class="albumIdUpdate">
+            </div>
+            <div class="input__wrapper">
+              <input type="text" placeholder="Title" class="titleUpdate">
+            </div>
+            <div class="input__wrapper">
+              <input type="text" placeholder="Url" class="urlUpdate">
+            </div>
+            <div class="input__wrapper">
+              <input type="text" placeholder="Thumbnail url" class="thumbnailUrlUpdate">
+            </div>
+            <div class="input__wrapper">
+              <input type="text" placeholder="Id photo" class="idPhotoUpdate">
+            </div>
+          </form>
+          </div>
+        </div>
+        <div class="buttons d-flex justify-content-around">
+          <button class="btnCreate button">
+            Add a new Photo
+          </button>
+          <button class="btnUpdate button">
+            Update Photo
+          </button>
+        </div>
+      </div>
+    </header>
+    <section class="main">
+      <div class="container">
+        <h2>
+          Photos
+        </h2>
+        <div class="photos__wrapper"></div>
+      </div>
+    </section>
+    <script src="main.js"></script>
   </body>
   </html>

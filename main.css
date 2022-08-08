@@ -1,0 +1,23 @@
+.wrapper__post {
+  margin-bottom: 15px;
+  text-align: center;
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: rgb(210, 182, 140);
+  color: blanchedalmond;
+  padding: 10px 0 ;
+}
+.btn__delete {
+  margin-top: 10px;
+
+}
+input {
+  border-radius: 10px;
+  text-align: center;
+}
+.input__wrapper {
+  margin-bottom: 5px;
+}
+.inputs {
+  margin-bottom: 10px;
+}

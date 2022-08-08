@@ -1,132 +1,117 @@
 /* 
-    TASK 1
+    Необходимо найти FREE REST API в просторах интернета. 
 
-    Дан объект : 
+    Пускай эта FREE REST API сможет дать вам полный CRUD (Create, Read, Update, Delete)
 
-    const car = {
-        company : 'Toyota',
-        model : 'Land Cruser',
-        doors : 5,
-        color : 'white'
-    }
-
-    Необходимо преобразовать данный объект в формат JSON , и потом обратно.
-    Запишите оба результата в переменную и выведите их значения в консоль.
-
+    При проверке домашнего задания наставник должен иметь возможность увидеть список
+    полученных данных с сервера на html странице.
+    
+    Так же с нее он должен иметь возможность удалить запись, создать новую,
+    или же обновить запись.
 */
 
-const car = {
-    company : 'Toyota',
-    model : 'Land Cruser',
-    doors : 5,
-    color : 'white'
+const requestUrl = 'https://jsonplaceholder.typicode.com/photos';
+const photosWrapper = document.querySelector('.photos__wrapper');
+const btnCreate = document.querySelector('.btnCreate');
+const btnUpdate = document.querySelector('.btnUpdate');
+
+let btnsDelete;
+let photos = [];
+
+const createTemplate = data => {
+  return template = `
+    <div class="wrapper__post" data-id="${data.id}">
+        <div class="albumId">AlbumId: ${data.albumId}</div>
+        <div class="id">ID: ${data.id}</div>
+        <div class="title">Title: ${data.title}</div>
+        <div class="url">Url: ${data.url}</div>
+        <div class="thumbnailUrl">ThumbnailUrl: ${data.thumbnailUrl}</div>
+        <button class="btn__delete">Delete post</button>
+    </div>
+  `
+};
+
+const getPhotos = url => {
+  fetch(url)
+    .then(response => response.json())
+    .then(json => {
+        photos = json;
+        photos.filter(item => {
+        return item.id >= 50 && item.id <= 60;
+      }).forEach(photo => {
+        photosWrapper.innerHTML += createTemplate(photo);
+      });
+      btnsDelete = document.querySelectorAll('.btn__delete');
+    })
+    .then(() => {
+      for (const elem of btnsDelete) {
+        elem.addEventListener('click', e => {
+          const idElem = e.target.parentNode.dataset.id;
+          deletePhoto(requestUrl, idElem);
+        })
+      }
+    })
+};
+
+const deletePhoto = (url, id) => {
+  fetch(url + '/' + id, {
+    method: 'DELETE'
+  })
+};
+
+getPhotos(requestUrl);
+
+const createPhoto = url => {
+  let inputAlbumId = document.querySelector('.albumIdAdd').value;
+  let inputTitle = document.querySelector('.titleAdd').value;
+  let inputUrl = document.querySelector('.urlAdd').value;
+  let inputThumbnailUrl = document.querySelector('.thumbnailUrlAdd').value;
+  let createObj = {
+    albumId: inputAlbumId,
+    title: inputTitle,
+    url: inputUrl,
+    thumbnailUrl: inputThumbnailUrl
+  }
+  fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(createObj),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  })
+    .then((response) => response.json())
+    .then((json) => console.log(json));
 }
 
-const carStr = JSON.stringify(car);
-// console.log(carStr);
-const result = JSON.parse(carStr);
-// console.log(result);
+btnCreate.addEventListener('click', e => {
+  e.preventDefault();
+  createPhoto(requestUrl);
+})
 
-/* 
-    TASK 2
-
-    Воспользуйтесь free REST API: https://jsonplaceholder.typicode.com/ для получения 
-    100 albums. И выведите все альбомы на html страницу в виде : 
-
-    UserId : значение userId с пришедшего вам объекта,
-    Id : значение Id с пришедшего вам объекта,
-    Title : значение title с пришедшего вам объекта
-
-    В итоге на вашей странице должно распарситься 100 разных альбомов. 
-
-*/
-
-const btnUser = document.querySelector('.btn__user');
-const btnId = document.querySelector('.btn__id');
-const btnTitle = document.querySelector('.btn__title');
-const albums = document.querySelector('.albums');
-const btnAlbums = document.querySelector('.btn__albums')
-
-const getAlbums = succesRequired => {
-  const xhr = new XMLHttpRequest();
-  const url = 'https://jsonplaceholder.typicode.com/albums';
-  xhr.open('GET', url);
-  xhr.addEventListener('load', () => {
-    succesRequired(JSON.parse(xhr.response));
-  });
-  xhr.addEventListener('error', () => {
-    console.log('Произошла ошибка');
-  });
-  xhr.send();
-};
-
-const domStyle = () => {
-    albums.style.display = 'flex';
-    albums.style.flexWrap = 'wrap';
-    albums.style.width = '500px';
-    albums.style.marginTop = '10px';
+const updatePhoto = url => {
+  let inputAlbumIdUpdate = document.querySelector('.albumIdUpdate').value;
+  let inputTitleUpdate = document.querySelector('.titleUpdate').value;
+  let inputUrlUpdate = document.querySelector('.urlUpdate').value;
+  let inputThumbnailUrlUpdate = document.querySelector('.thumbnailUrlUpdate').value;
+  let inputIdPhotoUpdate = document.querySelector('.idPhotoUpdate').value;
+  fetch(url + '/' + inputIdPhotoUpdate, {
+    method: 'PUT',
+    body: JSON.stringify({
+        albumId: inputAlbumIdUpdate,
+        id: inputIdPhotoUpdate,
+        title: inputTitleUpdate,
+        url: inputUrlUpdate,
+        thumbnailUrl: inputThumbnailUrlUpdate,
+    }),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  })
+    .then((response) => response.json())
+    .then((json) => console.log(json));
 }
 
-const getAlbumsUserId = response => {
-    domStyle();
-    response.forEach((item, idx) => {
-        if(idx < response.length - 1) {
-            albums.innerHTML += `
-            <div>UserId: ${item.userId},&nbsp</div>
-        `
-        }else {
-            albums.innerHTML += `
-            <div>UserId: ${item.userId}.&nbsp</div>
-        `
-        }
-    });
-};
-
-const getAlbumsId = response => {
-    domStyle();
-    response.forEach((item, idx) => {
-        if(idx < response.length - 1) {
-            albums.innerHTML += `
-            <div>Id: ${item.id},&nbsp</div>
-        `
-        }else {
-            albums.innerHTML += `
-            <div>Id: ${item.id}.&nbsp</div>
-        `
-        }
-    });
-};
-
-const getAlbumsTitle = response => {
-    domStyle();
-    response.forEach(item => {
-            albums.innerHTML += `
-            <div>Title: ${item.title}.&nbsp</div>
-        `
-    });
-};
-
-const $getAlbums = response => {
-    domStyle();
-    response.forEach(item => {
-        albums.innerHTML += `
-            <div>UserId: ${item.userId}, Id: ${item.id}, Title: ${item.title}.</div>
-        `
-    });
-};
-
-btnUser.addEventListener('click', () => {
-    getAlbums(getAlbumsUserId);
-});
-
-btnId.addEventListener('click', () => {
-    getAlbums(getAlbumsId);
-});
-
-btnTitle.addEventListener('click', () => {
-    getAlbums(getAlbumsTitle);
-});
-
-btnAlbums.addEventListener('click', () => {
-    getAlbums($getAlbums);
-});
+btnUpdate.addEventListener('click', e => {
+  e.preventDefault();
+  updatePhoto(requestUrl);
+})

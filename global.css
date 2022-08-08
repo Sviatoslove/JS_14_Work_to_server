@@ -1,0 +1,67 @@
+
+/* -----------Specification------------- */
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: 'Gilroy', Geneva, sans-serif;
+  font-size: 18px;
+  line-height: 22px;
+  color: #000000;
+  padding: 0;
+  margin: 0;
+}
+.container {
+  max-width: 944px;
+  width: 100%;
+  margin: 10px auto 20px;
+}
+.d-flex {
+  display: flex;
+}
+.justify-content-around {
+  justify-content: space-around;
+}
+.align-items-center {
+  align-items: center;
+}
+.button, .btn__delete {
+  min-width: 180px;
+  height: 42px;
+  background-color: #070707;
+  color: #fff;
+  font-weight: 700;
+  padding: 0 30px;
+  border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.button:hover {
+  background-color: #F6F6F6;
+  color: #000;
+}
+div, p, form, input, button, a, span {
+  box-sizing: border-box;
+}
+input, input:hover, input:focus, input:active, button, button:hover, button:focus, button:active {
+  outline: none;
+}
+button {
+  padding: 0;
+}
+a, button, input {
+  transition: all 0.5s ease;
+}
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+h2 {
+  font-size: 20px;
+  line-height: 20px;
+  text-align: center;
+  margin-bottom: 15px;
+}
