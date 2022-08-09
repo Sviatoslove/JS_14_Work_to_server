@@ -21,8 +21,8 @@ body {
 .d-flex {
   display: flex;
 }
-.justify-content-around {
-  justify-content: space-around;
+.justify-content-between {
+  justify-content: space-between;
 }
 .align-items-center {
   align-items: center;
